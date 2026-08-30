@@ -1,4 +1,6 @@
 name: Big Bonk
+# Public fork (proyecto-viviana/kumo-solidaria): never create CF_AI_GATEWAY_*
+# GitHub secrets here. This job stays owner-gated to cloudflare.
 
 on:
   issue_comment:
@@ -14,7 +16,7 @@ concurrency:
 
 jobs:
   bonk:
-    if: github.event.sender.type != 'Bot' && contains(github.event.comment.body, '/bigbonk')
+    if: github.repository_owner == 'cloudflare' && github.event.sender.type != 'Bot' && contains(github.event.comment.body, '/bigbonk')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:

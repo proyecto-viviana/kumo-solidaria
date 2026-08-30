@@ -1,4 +1,7 @@
 name: Preview
+# Public fork (proyecto-viviana/kumo-solidaria): never create CLOUDFLARE_*,
+# SCREENSHOT_API_KEY, CF_AI_GATEWAY_*, or TURBO_* GitHub secrets here.
+# Secret-using jobs stay owner-gated to cloudflare.
 
 on:
   pull_request:
@@ -116,6 +119,7 @@ jobs:
     # Run for pull_request (non-fork) OR push events with resolved PR (non-fork)
     if: |
       always() &&
+      github.repository_owner == 'cloudflare' &&
       needs.docs-build.result == 'success' &&
       (
         (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) ||
@@ -234,7 +238,7 @@ jobs:
   visual-regression:
     name: Visual Regression
     needs: docs-deploy
-    if: always() && needs.docs-deploy.result == 'success' && needs.docs-deploy.outputs.preview_url != ''
+    if: always() && github.repository_owner == 'cloudflare' && needs.docs-deploy.result == 'success' && needs.docs-deploy.outputs.preview_url != ''
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

@@ -18,6 +18,8 @@
 # executing the fork's copy of the script.
 #
 # For internal PRs, deployment happens directly in preview.yml (docs-deploy job).
+# Public fork (proyecto-viviana/kumo-solidaria): never create CLOUDFLARE_*,
+# SCREENSHOT_API_KEY, CF_AI_GATEWAY_*, or TURBO_* GitHub secrets here.
 
 name: Preview Deploy (Forks)
 
@@ -42,6 +44,7 @@ jobs:
     # 2. Pull request events (not push)
     # 3. Fork PRs only (internal PRs deploy in preview.yml directly)
     if: >-
+      github.repository_owner == 'cloudflare' &&
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.head_repository.full_name != github.repository
@@ -189,7 +192,7 @@ jobs:
   visual-regression:
     name: Visual Regression (Fork)
     needs: deploy
-    if: ${{ needs.deploy.outputs.preview_url }}
+    if: ${{ github.repository_owner == 'cloudflare' && needs.deploy.outputs.preview_url }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

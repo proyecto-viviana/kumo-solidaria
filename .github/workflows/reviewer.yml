@@ -1,4 +1,6 @@
 name: Reviewer
+# Public fork (proyecto-viviana/kumo-solidaria): never create CF_AI_GATEWAY_*
+# GitHub secrets here. This job stays owner-gated to cloudflare.
 
 on:
   pull_request_review_comment:
@@ -10,7 +12,7 @@ concurrency:
 
 jobs:
   reviewer:
-    if: github.event.sender.type != 'Bot'
+    if: github.repository_owner == 'cloudflare' && github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
     permissions:
       id-token: write

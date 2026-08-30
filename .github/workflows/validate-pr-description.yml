@@ -1,4 +1,6 @@
 name: Validate PR Description
+# Public fork (proyecto-viviana/kumo-solidaria): never create TURBO_* GitHub
+# secrets here. This job stays owner-gated to cloudflare.
 
 on:
   pull_request:
@@ -20,7 +22,7 @@ permissions:
 jobs:
   check:
     # Don't check the Version Packages PR
-    if: github.head_ref != 'changeset-release/main'
+    if: github.repository_owner == 'cloudflare' && github.head_ref != 'changeset-release/main'
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-add-pr
       cancel-in-progress: true
